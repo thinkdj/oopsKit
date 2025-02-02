@@ -8,6 +8,8 @@ A simple, responsive maintenance page that informs visitors when your website is
 
 When active, visitors will see a friendly message indicating that the site is under maintenance
 
+![Page preview](./assets/preview.png)
+
 ## Usage
 
 1. Replace your main index file with these files during maintenance periods
@@ -49,4 +51,5 @@ Feel free to use this maintenance page for your projects. Attribution is appreci
 
 You can even temporarily use the GH Pages url as your redirected landing page when your site is under maintenance.
 
-🕊️
+
+> 🕊️
