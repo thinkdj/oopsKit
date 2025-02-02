@@ -15,10 +15,10 @@ When active, visitors will see a friendly message indicating that the site is un
 
 If you're using Cloudflare for your site, you can use the GH Pages url as the redirected landing page when your site is under maintenance.
 
-This is a great way to keep your entire site:pages, assets, API etc. offline while you work on the maintenance.
+_This is a great way to keep your entire site: pages, assets, API et al. offline while you work on the maintenance._
 
 1. Go to your Cloudflare dashboard and create a new page rule under Rules > Page Rules.
-2. Set the page rule url to *.yoursite.com/* and the destination URL to the GH Pages url (https://thinkdj.github.io/oops-kit/) so that all requests to your site are redirected to the maintenance page. 
+2. Set the page rule url to *.yoursite.com/ * and the destination URL to the GH Pages url (https://thinkdj.github.io/oops-kit/) so that all requests to your site are redirected to the maintenance page. 
 ![Cloudflare Page Rule](./assets/cloudflare_pagerule.png)
 3. Set the redirect type to "302 - Temporary Redirect".
 4. Save the page rule and disable it when your site is no longer under maintenance.
