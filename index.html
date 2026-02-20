@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,16 +9,330 @@
     <meta name="theme-color" content="#000000">
     <meta name="author" content="thinkdj">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
+    <style>
+        /* ── CSS Variables ── */
+        :root {
+            --primary:        #6366f1;
+            --primary-glow:   rgba(99, 102, 241, 0.25);
+            --bg:             #f0f4ff;
+            --card-bg:        #ffffff;
+            --text-heading:   #1e293b;
+            --text-body:      #64748b;
+            --track-bg:       #e2e8f0;
+            --border:         rgba(0,0,0,0.06);
+            --shadow:         0 20px 60px -10px rgba(99,102,241,0.18), 0 4px 16px rgba(0,0,0,0.08);
+            --toggle-bg:      #e2e8f0;
+            --toggle-icon-bg: #ffffff;
+            --toggle-shadow:  0 2px 6px rgba(0,0,0,0.15);
+            --radius:         20px;
+            --transition:     0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg:             #0d1117;
+            --card-bg:        #161b22;
+            --text-heading:   #f0f6fc;
+            --text-body:      #8b949e;
+            --track-bg:       #21262d;
+            --border:         rgba(255,255,255,0.06);
+            --shadow:         0 20px 60px -10px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.4);
+            --toggle-bg:      #30363d;
+            --toggle-icon-bg: #6366f1;
+            --toggle-shadow:  0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { height: 100%; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            padding: clamp(1rem, 4vw, 2rem);
+            transition: background-color var(--transition);
+            position: relative;
+        }
+
+        /* ── Background decoration ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 20%, var(--primary-glow), transparent),
+                radial-gradient(ellipse 50% 40% at 80% 80%, var(--primary-glow), transparent);
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity var(--transition);
+        }
+
+        /* ── Dark Mode Toggle ── */
+        .theme-toggle {
+            position: fixed;
+            top: clamp(0.75rem, 2vw, 1.25rem);
+            right: clamp(0.75rem, 2vw, 1.25rem);
+            z-index: 100;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: var(--toggle-shadow);
+            transition: background var(--transition), box-shadow var(--transition), border-color var(--transition);
+            outline: none;
+        }
+
+        .theme-toggle:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+        }
+
+        .toggle-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--toggle-icon-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background var(--transition), transform var(--transition);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+
+        .theme-toggle:hover .toggle-icon {
+            transform: rotate(20deg);
+        }
+
+        /* ── Card ── */
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+            max-width: min(520px, 100%);
+            padding: clamp(1.75rem, 5vw, 3rem) clamp(1.5rem, 5vw, 2.75rem);
+            border-radius: var(--radius);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+            transition: background var(--transition), box-shadow var(--transition), border-color var(--transition);
+        }
+
+        /* ── Logo / Emoji ── */
+        .logo {
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            margin-bottom: clamp(1rem, 3vw, 1.75rem);
+            display: inline-block;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 4px 12px var(--primary-glow));
+        }
+
+        /* ── Badge ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-glow);
+            color: var(--primary);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        /* ── Heading ── */
+        h1 {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: clamp(0.75rem, 2vw, 1.1rem);
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            transition: color var(--transition);
+        }
+
+        /* ── Body text ── */
+        p {
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            color: var(--text-body);
+            line-height: 1.7;
+            margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+            transition: color var(--transition);
+        }
+
+        /* ── Progress ── */
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: var(--track-bg);
+            border-radius: 99px;
+            overflow: hidden;
+            transition: background var(--transition);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 45%;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            border-radius: 99px;
+            animation: sweep 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            border-radius: 99px;
+            margin: clamp(1.25rem, 3vw, 1.75rem) auto;
+        }
+
+        /* ── Footer note ── */
+        .footer-note {
+            font-size: 0.78rem;
+            color: var(--text-body);
+            opacity: 0.7;
+            margin-top: clamp(1.25rem, 3vw, 1.75rem);
+            transition: color var(--transition);
+        }
+
+        /* ── Keyframes ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0)   scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-10px); }
+        }
+
+        @keyframes sweep {
+            0%   { transform: translateX(-120%); }
+            100% { transform: translateX(320%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.5; transform: scale(0.75); }
+        }
+
+        /* ── Responsive tweaks ── */
+        @media (max-width: 400px) {
+            .container { border-radius: 14px; }
+        }
+
+        @media (min-width: 768px) {
+            .container { max-width: 500px; }
+        }
+
+        /* ── Reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            .logo, .progress-bar, .badge-dot { animation: none; }
+            .container { animation: none; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">⌛</div>
+
+    <!-- Dark / Light mode toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="toggle-icon" id="toggleIcon">🌙</span>
+    </button>
+
+    <div class="container" role="main">
+        <div class="logo" aria-hidden="true">⌛</div>
+
+        <div class="badge">
+            <span class="badge-dot"></span>
+            In Progress
+        </div>
+
         <h1>We're making improvements</h1>
-        <p>Our site is currently undergoing maintenance to improve your experience. Please check back soon.</p>
-        <div class="progress-container">
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <p>Our site is currently undergoing maintenance to improve your experience. We'll be back online shortly — thank you for your patience.</p>
+
+        <div class="progress-container" role="progressbar" aria-label="Maintenance progress" aria-valuetext="In progress">
             <div class="progress-bar"></div>
         </div>
+
+        <p class="footer-note">Expected downtime: a few hours</p>
     </div>
+
+    <script>
+        (function () {
+            const html        = document.documentElement;
+            const btn         = document.getElementById('themeToggle');
+            const icon        = document.getElementById('toggleIcon');
+            const STORAGE_KEY = 'theme-preference';
+
+            // Determine initial theme: stored preference → system preference → light
+            function getSystemTheme() {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            function applyTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+                btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+                try { localStorage.setItem(STORAGE_KEY, theme); } catch (_) {}
+            }
+
+            function getInitialTheme() {
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored === 'dark' || stored === 'light') return stored;
+                } catch (_) {}
+                return getSystemTheme();
+            }
+
+            // Apply on load (no flash)
+            applyTheme(getInitialTheme());
+
+            // Toggle on click
+            btn.addEventListener('click', function () {
+                const current = html.getAttribute('data-theme');
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            });
+
+            // Sync with OS preference changes (only if user hasn't manually set a preference)
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                try {
+                    if (!localStorage.getItem(STORAGE_KEY)) {
+                        applyTheme(e.matches ? 'dark' : 'light');
+                    }
+                } catch (_) {
+                    applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
