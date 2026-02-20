@@ -1,4 +1,4 @@
-# OopsKit
+﻿# OopsKit
 
 ### Maintenance pages for your website
 
@@ -27,14 +27,13 @@ _This is a great way to keep your entire site: pages, assets, API et al. offline
 
 If you're not using Cloudflare, you can still use this page as a temporary landing page when your site is under maintenance by self hosting it on your own server.
 
-1. Temporarily replace your main index file with these files during maintenance periods (`index.html` and `styles.css`)
-2. Customize the message in `index.html` and/or modify colors and styles in `styles.css` to match your brand if needed
+1. Temporarily replace your main index file with `index.html` during maintenance periods
+2. Customize the message and styles directly in `index.html` to match your brand if needed
 
 ## File Structure
 
 ```
-├── index.html          # Main HTML file
-├── styles.css          # CSS styles with dark mode support
+├── index.html          # Main HTML file (includes embedded styles)
 └── README.md           # Documentation
 ```
 
@@ -51,7 +50,7 @@ Edit the text in `index.html`:
 
 ### Modifying Colors
 
-The color scheme can be customized in `styles.css`. The file includes both light and dark mode color variables.
+The color scheme can be customized via CSS variables near the top of the `<style>` block in `index.html`. The file includes both light and dark mode color variables.
 
 ## Browser Support
 
@@ -63,7 +62,6 @@ The color scheme can be customized in `styles.css`. The file includes both light
 
 Feel free to use this maintenance page for your projects. Attribution is appreciated but not required.
 
-You can even temporarily use the GH Pages url as your redirected landing page when your site is under maintenance.
 
 
 > 🕊️
